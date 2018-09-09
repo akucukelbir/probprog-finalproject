@@ -1,7 +1,7 @@
 # Final Project Repository Template
 
 This is the final project repository template for
-[Machine Learning with Probabilistic Programming](http://www.proditus.com/syllabus.html).
+[Machine Learning with Probabilistic Programming](http://www.proditus.com/syllabus2018.html).
 
 ## Duplicating your own copy of this repository
 
@@ -49,7 +49,7 @@ correspond to a particular step of Box's loop. Feel free to include images; you
 can embed them in markdown cells.
 
 ## Development
-Use Python 3.6+. (I use Python 3.6.1).
+Use Python 3.6+. (I use Python 3.6.5).
 
 Configure a virtual environment.
 Follow the documentation
@@ -65,7 +65,7 @@ packages.
 This should install Edward, along with Jupyter and other useful libraries.
 You should see a message at the end that resembles something like
 ```
-Successfully installed appnope-0.1.0 bleach-1.5.0 cycler-0.10.0 decorator-4.1.2 edward-1.3.3 entrypoints-0.2.3 flake8-3.4.1 html5lib-0.9999999 ipykernel-4.6.1 ipython-6.1.0 ipython-genutils-0.2.0 ipywidgets-7.0.0 jedi-0.10.2 jinja2-2.9.6 jsonschema-2.6.0 jupyter-1.0.0 jupyter-client-5.1.0 jupyter-console-5.2.0 jupyter-core-4.3.0 markdown-2.6.9 markupsafe-1.0 matplotlib-2.0.2 mccabe-0.6.1 mistune-0.7.4 nbconvert-5.3.1 nbformat-4.4.0 notebook-5.0.0 numpy-1.13.1 olefile-0.44 pandas-0.20.3 pandocfilters-1.4.2 pexpect-4.2.1 pickleshare-0.7.4 pillow-4.2.1 prompt-toolkit-1.0.15 protobuf-3.4.0 ptyprocess-0.5.2 py-1.4.34 pycodestyle-2.3.1 pyflakes-1.5.0 pygments-2.2.0 pyparsing-2.2.0 pytest-3.2.2 pytest-flake8-0.8.1 pytest-runner-2.12.1 python-dateutil-2.6.1 pytz-2017.2 pyzmq-16.0.2 qtconsole-4.3.1 scipy-0.19.1 seaborn-0.8.1 simplegeneric-0.8.1 six-1.10.0 tensorflow-1.3.0 tensorflow-tensorboard-0.1.6 terminado-0.6 testpath-0.3.1 tornado-4.5.2 traitlets-4.3.2 wcwidth-0.1.7 werkzeug-0.12.2 widgetsnbextension-3.0.2
+Successfully installed appnope-0.1.0 bleach-1.5.0 ...
 ```
 
 ### Additional dependencies
