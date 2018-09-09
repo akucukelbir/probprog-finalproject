@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 
 requirements.in
+mypythonfile.py
