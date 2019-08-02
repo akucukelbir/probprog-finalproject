@@ -1,7 +1,7 @@
 # Final Project Repository Template
 
 This is the final project repository template for
-[Machine Learning with Probabilistic Programming](http://www.proditus.com/syllabus2018.html).
+[Machine Learning with Probabilistic Programming](http://www.proditus.com/mlpp2019).
 
 ## Duplicating your own copy of this repository
 
@@ -49,11 +49,11 @@ correspond to a particular step of Box's loop. Feel free to include images; you
 can embed them in markdown cells.
 
 ## Development
-Use Python 3.6+. (I use Python 3.6.5).
+Use Python 3.7+. (I use Python 3.7.2).
 
 Configure a virtual environment.
 Follow the documentation
-[here](https://docs.python.org/3.6/tutorial/venv.html).
+[here](https://docs.python.org/3.7/tutorial/venv.html).
 (I like to use [virtualenvwrapper](http://virtualenvwrapper.readthedocs.io/).)
 
 Once you activate the virtual environment, use `pip` to install a variety of
@@ -62,18 +62,15 @@ packages.
 (venv)$ pip install -r requirements.txt
 ```
 
-This should install Edward, along with Jupyter and other useful libraries.
+This should install Pyro, along with Jupyter and other useful libraries.
 You should see a message at the end that resembles something like
 ```
-Successfully installed appnope-0.1.0 bleach-1.5.0 ...
+Successfully installed appnope-0.1.0 ...
 ```
 
 ### Additional dependencies
 If you introduce any new dependencies to your final project, you **MUST**
 update `requirements.txt` with pinned versioning.
-
-If you plan to introduce any non-pip-installable (e.g. Stan) dependencies to
-your final project, you **MUST** provide a `Dockerfile`. (Please contact me before you do so.)
 
 ### Git stuff
 There is a comprehensive `.gitignore` file in this repository. This should prevent you from committing any unnecessary files. Please edit it as needed and do not commit any large files to the repository. (Especially huge datasets.)
@@ -84,7 +81,9 @@ Any additional code you write must pass `flake8` linting. See this
 
 The first thing we will do after cloning your repository is:
 ```{bash}
-(venv)$ pytest --flake8
+(venv)$ flake8
 ```
 
-If your repository fails any checks, we will **deduct 20%** from your final project grade.
+If your repository fails any checks, we will **deduct 20%** from your final project grade. 
+
+We have included a test file `mypythonfile.py` that passes `flake8` as a sanity check. 
