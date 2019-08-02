@@ -84,6 +84,4 @@ The first thing we will do after cloning your repository is:
 (venv)$ flake8
 ```
 
-If your repository fails any checks, we will **deduct 20%** from your final project grade. 
-
-We have included a test file `mypythonfile.py` that passes `flake8` as a sanity check. 
+If your repository fails any checks, we will **deduct 20%** from your final project grade.
