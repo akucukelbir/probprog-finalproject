@@ -1,7 +1,7 @@
 # Final Project Repository Template
 
 This is the final project repository template for
-[Machine Learning with Probabilistic Programming](http://www.proditus.com/mlpp2019).
+[Machine Learning with Probabilistic Programming](http://www.proditus.com/mlpp2020).
 
 ## Duplicating your own copy of this repository
 
@@ -49,11 +49,11 @@ correspond to a particular step of Box's loop. Feel free to include images; you
 can embed them in markdown cells.
 
 ## Development
-Use Python 3.7+. (I use Python 3.7.2).
+Use Python 3.8+. (I use Python 3.8.5).
 
 Configure a virtual environment.
 Follow the documentation
-[here](https://docs.python.org/3.7/tutorial/venv.html).
+[here](https://docs.python.org/3.8/tutorial/venv.html).
 (I like to use [virtualenvwrapper](http://virtualenvwrapper.readthedocs.io/).)
 
 Once you activate the virtual environment, use `pip` to install a variety of
