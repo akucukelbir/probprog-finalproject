@@ -22,13 +22,8 @@ for idx, node in enumerate(newyork_graph.nodes):
     points_ID[tuple(points[idx])] = node
 tree = KDTree(points, leaf_size=2)
 
-b = df.shape[0]
 
 def populate_nearest_node(row):
-    global b
-    b -= 1
-    if b % 100000 == 0:
-        print(b)
     point = (row['longitude'], row['latitude'])
     dist, ind = tree.query([point], k=1)
     osmid = points_ID[tuple(points[ind[0][0]])]
