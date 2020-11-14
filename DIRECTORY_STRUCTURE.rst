@@ -17,3 +17,9 @@ To generate all of the datasets used for the project. Run the python
 script ``generate_datasets.py``
 
 
+test_notebooks
+##############
+The test_notebooks folders contain jupyter notebooks that attempt to
+implement some of the models that we use but using fake data. We do
+this as a way of making sure that our inference methods are sound and
+we are not getting something with absurd parameters. 
