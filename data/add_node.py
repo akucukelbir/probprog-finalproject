@@ -30,4 +30,4 @@ def populate_nearest_node(row):
     return osmid
 
 df['node'] = df.parallel_apply(populate_nearest_node, axis=1)
-df.to_csv("reduced_node_data.csv", index=False)
+df.to_csv("accident_node_data.csv", index=False)
