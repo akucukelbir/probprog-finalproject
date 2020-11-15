@@ -12,9 +12,12 @@ import pandas as pd
 
 
 aadt_complete = pd.read_csv("aadt.csv", index_col=False)
+print(aadt_complete.size)
+aadt_complete = aadt_complete.drop_duplicates().dropna(subset=['Count'])
+print(aadt_complete.size)
 aadt_2019_map = pd.read_csv("aadt_2019_map.csv", index_col=0)
-
-
+aadt_2019_map = aadt_2019_map.rename(columns={'RoadwayName': 'Road Name', 'BeginDescription': 'Beginning Description', 'EndDescription': 'Ending Description'})
+print(aadt_2019_map.columns)
 # In[18]:
 
 
@@ -49,9 +52,13 @@ for i, year in enumerate(years):
 
 
 joined_aadt = years_aadt[0]
-print("AS")
 for year_aadt in years_aadt[1:]:
-    joined_aadt = pd.merge(year_aadt, joined_aadt, on=['Road Name', 'Beginning Description', 'Ending Description'])
+    print(joined_aadt)
+    print(year_aadt)
+    joined_aadt = pd.merge(year_aadt.drop_duplicates(), joined_aadt, how='outer', on=['Road Name', 'Beginning Description', 'Ending Description'])
+    print(joined_aadt)
     print("AS")
+
+joined_aadt = pd.merge(joined_aadt, aadt_2019_map, how='inner', on=['Road Name', 'Beginning Description', 'Ending Description'])
 print(joined_aadt)
 joined_aadt.to_csv("joined_aadt.csv", index=False)
