@@ -3,6 +3,8 @@ This file contains utility functions related to data cleaning
 or data processing that we use elsewhere
 """
 
+import numpy as np
+
 def lineseg_dists(p, a, b):
     """Cartesian distance from point to line segment
 
