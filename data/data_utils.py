@@ -35,5 +35,4 @@ def lineseg_dists(p, a, b):
     # rowwise cross products of 2D vectors  
     d_pa = p - a
     c = d_pa[:, 0] * d[:, 1] - d_pa[:, 1] * d[:, 0]
-
     return np.hypot(h, c)
