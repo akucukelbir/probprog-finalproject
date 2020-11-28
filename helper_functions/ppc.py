@@ -61,14 +61,14 @@ def plot_total_distributions(samples, train_mat, shape, subset):
     Returns:
     fig
     """
-    samples_total = np.sum(samples[:,subset], axis=-1)
+    to_plot = [np.sum(samples[:,i], axis = -1) for i in subset]
     real_total = np.sum(train_mat[subset],axis=-1)
     
     fig, axs = plt.subplots(nrows=shape[0],ncols=shape[1], figsize=(shape[1]*4,3*shape[0])) 
     fig.suptitle("Total crash distribution at different sites")
     for i in range(len(axs)): 
         for j in range(len(axs[0])):
-            sns.histplot(x=samples_total[:,i+j],ax=axs[i][j], stat='probability', binwidth=2,fill=False)
+            sns.histplot(x=to_plot[i+j],ax=axs[i][j], stat='probability',fill=False)
             axs[i][j].scatter(x=[real_total[i+j]],y=[0], alpha= 1, marker='o', label='Dataset total', c='r',s=100)
             axs[i][j].legend()
     fig.tight_layout()
