@@ -48,7 +48,7 @@ def plot_max(samples, train_mat, num_max=10):
     return ax
 
 
-def plot_total_distributions(samples, train_mat, shape, subset):
+def plot_total_distributions(samples, train_mat, shape,subset = 4): 
     """
     Plots the  histplot of the total crashes per site on selected sites alongside real values.
 
@@ -62,13 +62,16 @@ def plot_total_distributions(samples, train_mat, shape, subset):
     Returns:
     fig
     """
+    num_sites = len(train_mat)
+    subset= torch.distributions.Categorical(torch.ones(subset, num_sites)/num_sites).sample()
+    
     to_plot = [np.sum(samples[:, i], axis=-1) for i in subset]
     real_total = np.sum(train_mat[subset], axis=-1)
 
     fig, axs = plt.subplots(
         nrows=shape[0], ncols=shape[1], figsize=(shape[1] * 4, 3 * shape[0])
     )
-    fig.suptitle("Total crash distribution at different sites")
+    fig.suptitle("Total crash posterior predictive distribution over period of time at random sites")
     for i in range(len(axs)):
         for j in range(len(axs[0])):
             sns.histplot(
