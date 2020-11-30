@@ -6,6 +6,7 @@ from pyro import plate
 from pyro.infer import config_enumerate, TraceEnum_ELBO, Trace_ELBO, SVI
 import numpy as np
 import predictors
+import pyro.contrib.autoguide as autoguide
 
 def base_model(num_sites, num_days, data=None):
     with plate('sites', size=num_sites, dim=-2):
@@ -89,7 +90,7 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
         }
     
     scheduler = optim.LambdaLR(optim_params)
-    svi = SVI(base_model, guide, scheduler,loss=Trace_ELBO())
+    svi = SVI(model, guide, scheduler,loss=Trace_ELBO())
 
     pyro.clear_param_store()
     losses = [np.inf]
@@ -105,12 +106,17 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
 
     return losses[1:]
 
-def train_log_linear(accidents, preds, predictor_labels, kappa, t_0):
+def train_log_linear(accidents, preds, predictor_labels, kappa, t_0, max_iters=2000):
     guide = autoguide.AutoDiagonalNormal(log_linear_model)
+    preds = predictors.get_some_predictors(preds, predictor_labels)
+    preds = torch.Tensor(preds)
+    accidents = torch.Tensor(accidents)
     model_args = {
             'num_sites': accidents.shape[0],
             'num_days': accidents.shape[1],
+            'num_predictors': preds.shape[2],
+            'predictors': preds,
             'data': torch.tensor(accidents)
     }
-    preds = predictors.get_some_predictors(preds, predictor_labels)
-    return train(log_linear_model, guide, kappa=kappa, t_0=t_0) 
+
+    return train(log_linear_model, guide, kappa=kappa, t_0=t_0, model_args=model_args, max_iters=max_iters), guide 

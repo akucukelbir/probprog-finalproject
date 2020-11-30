@@ -104,7 +104,7 @@ def plot_time_trend(samples, train_mat, window=61, polynomial=3):
         alpha = quantiles_to_observe[i]
         ax.fill_between(time, quantiles[i],quantiles[-i - 1],
                         alpha = 0.25, color=colors[i],
-                        label='Posterior {:.2f} interval'.format(1-2*alpha))
+                        label='Data between {:.2f} and {:.2f} quantile'.format(alpha, 1-alpha))
    
     ax.set_title("Savgol smoothed accidents per day in Manhattan")
     ax.legend()

@@ -36,6 +36,6 @@ def get_data():
     accident_df['datetime'] = pd.to_datetime(accident_df['datetime'])
     accident_df = accident_df[accident_df['datetime'] >= FIRST_DAY]
     categorical_mapping, accidents = get_accidents(accident_df)
-    accidents = accidents[:NUM_DAYS]
+    accidents = accidents[:,:NUM_DAYS]
     pred = predictors.get_predictors(weather_df, intersection_df, categorical_mapping)
     return accidents, pred
