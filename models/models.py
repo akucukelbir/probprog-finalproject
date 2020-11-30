@@ -18,10 +18,10 @@ def base_model(num_sites, num_days, data=None):
 
 
 def log_linear_model(num_sites, num_days, num_predictors,predictors, data=None):
-    betas = pyro.sample('betas', dist.Normal(0 * torch.ones(num_predictors), 2* torch.ones(num_predictors)))
+    betas = pyro.sample('betas', dist.Normal(0 * torch.ones(num_predictors), 10* torch.ones(num_predictors)))
     thetas = predictors @ betas
     with plate('sites', size=num_sites, dim=-2):
-        epsilon = pyro.sample('epsilon', dist.Normal(0, 5)).expand(num_sites, num_days)
+        epsilon = pyro.sample('epsilon', dist.Normal(0, 2)).expand(num_sites, num_days)
         with plate('days', size=num_days, dim=-1):
             thetas = thetas + epsilon
             accidents = pyro.sample('accidents', dist.Poisson(torch.exp(thetas)), obs=data) 
