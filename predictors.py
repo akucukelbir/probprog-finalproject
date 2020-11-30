@@ -2,14 +2,11 @@ from constants import *
 import pandas as pd
 import numpy as np
 
-def get_predictors(categorical_mapping):
+def get_predictors(weather_df, intersection_df, categorical_mapping):
     first_week = np.array([0,0,0,1,1,0,0])
-    weather_df = pd.read_csv("data/weather/processed/data.csv")
-    intersection_df = pd.read_csv("data/intersection/processed/data.csv")
     predictors = np.zeros((len(categorical_mapping.keys()), NUM_DAYS, 8))
     predictors[:, :, 0] = 1
     intersection_df = intersection_df.replace({'nodes': categorical_mapping})
-    print(intersection_df['Count_mean'])
     for i in range(len(intersection_df)):
         if intersection_df['nodes'][i] >= 0 and intersection_df['nodes'][i] < predictors.shape[0]:
             predictors[intersection_df['nodes'][i], :, 1] = np.log(intersection_df['Count_mean'][i])
@@ -21,7 +18,7 @@ def get_predictors(categorical_mapping):
             predictors[:, idx, 3:7] = [elem.AWND, elem.PRCP, elem.SNWD, elem.TAVG]
     is_week = np.array([first_week[i%7] for i in range(NUM_DAYS)])
     predictors[:,:,7] = is_week
-    return predictors
+    return normalize(predictors)
 
 
 def normalize(predictors):
@@ -31,8 +28,7 @@ def normalize(predictors):
     normalization_constant =  np.max(np.max(predictors, axis=1), axis =0)
     return predictors/normalization_constant
 
-def get_some_predictors(predictor_labels, categorical_mapping):
-    global predictors
+def get_some_predictors(predictors, predictor_labels, categorical_mapping):
     pred_dict = {
             'aadt': 1,
             'is_intersection': 2,
