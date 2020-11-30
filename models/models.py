@@ -5,7 +5,7 @@ import pyro.distributions as dist
 from pyro import plate
 from pyro.infer import config_enumerate, TraceEnum_ELBO, Trace_ELBO, SVI
 import numpy as np
-
+import predictors
 
 def base_model(num_sites, num_days, data=None):
     with plate('sites', size=num_sites, dim=-2):
@@ -73,7 +73,7 @@ def negative_binomial_log_linear_model(num_sites, num_days, num_predictors,predi
     return accidents
 
 
-def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  loss=Trace_ELBO, lr = 0.05):
+def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  loss=Trace_ELBO, lr=1):
     """
     Trains model with guide. Kappa t_0 are parameters discussd in class
     Returns list with losses 
@@ -103,5 +103,14 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
         if i % 50 == 0: 
             print("In step {} the Elbo is {}".format(i,elbo))
 
-    return losses
-    
+    return losses[1:]
+
+def train_log_linear(accidents, preds, predictor_labels, kappa, t_0):
+    guide = autoguide.AutoDiagonalNormal(log_linear_model)
+    model_args = {
+            'num_sites': accidents.shape[0],
+            'num_days': accidents.shape[1],
+            'data': torch.tensor(accidents)
+    }
+    preds = predictors.get_some_predictors(preds, predictor_labels)
+    return train(log_linear_model, guide, kappa=kappa, t_0=t_0) 
