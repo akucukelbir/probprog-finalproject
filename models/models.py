@@ -31,7 +31,7 @@ def log_linear_model(
     )
     thetas = predictors @ betas
     with plate("sites", size=num_sites, dim=-2):
-        epsilon = pyro.sample("epsilon", dist.Normal(0, 10)).expand(
+        epsilon = pyro.sample("epsilon", dist.Normal(0, 5)).expand(
             num_sites, num_days
         )
         with plate("days", size=num_days, dim=-1):
@@ -149,8 +149,8 @@ def train_with_random_init(model, model_args, kappa, t_0, threshold=1, max_iters
     for i in range(max_iters):
         scheduler.step()
         elbo = svi.step(**model_args)
-        if np.abs(elbo - losses[-1]) < threshold:
-            break
+        #if np.abs(elbo - losses[-1]) < threshold:
+        #    break
         
         losses.append(elbo)
         if i % 50 == 0: 
@@ -213,6 +213,7 @@ def train_log_linear_random_init(accidents, preds, predictor_labels, kappa, t_0,
             'predictors': preds,
             'data': torch.tensor(accidents)
     }
+
 
     return train_with_random_init(log_linear_model, kappa=kappa, t_0=t_0, model_args=model_args, max_iters=max_iters)
 
