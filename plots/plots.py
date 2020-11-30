@@ -4,13 +4,14 @@ sys.path.insert(1, "../")
 
 from folium.plugins import FastMarkerCluster, HeatMap
 import folium
-
+import matplotlib.patches as mpatches
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import scipy
+import matplotlib.pyplot as plt
 
 import datetime
 import constants
@@ -52,34 +53,27 @@ def make_time_series(data_mat):
             x=time, y=smooth_accidents, mode="lines", name="Smooth accidents"
         )
     )
+    fig.update_layout(
+        title="Accidents per day in Manhattan",
+        xaxis_title="Days since start of 2014",
+        yaxis_title="Number of accidents",)
     fig.show()
 
 
 def make_mean_log_mean(data_mat):
     mean_accidents = np.sum(data_mat, axis=1) / len(data_mat)
-    sns.displot(
-        pd.DataFrame({"mean accidents": mean_accidents}),
-        x="mean accidents",
-        kind="kde",
-    )
-    sns.displot(
-        pd.DataFrame(
-            {
-                "log mean accidents": np.log(
-                    mean_accidents + 0.000000000001 / len(mean_accidents)
-                )
-            }
-        ),
-        x="log mean accidents",
-        kind="kde",
-    )
-
+    fig, ax = plt.subplots(1,2,figsize=(12,4))
+    sns.kdeplot(mean_accidents, ax= ax[0])
+    sns.kdeplot(np.log(mean_accidents + 0.000000001), ax= ax[1])
+    ax[0].set_xlabel("mean accidents per day for each site")
+    ax[1].set_xlabel("log of mean accidents per day for each site ")
+    fig.suptitle("Means and log means accidents of each site per day")
 
 def plot_svi_loss(losses):
     elbo_df = pd.DataFrame(
-        {"Iteration": list(range(len(losses))), "Loss": np.log(losses)}
+        {"Iteration": list(range(len(losses))), "log-loss": np.log(losses)}
     )
-    fig = px.line(elbo_df, x="Iteration", y="Loss", title="Elbo")
+    fig = px.line(elbo_df, x="Iteration", y="log-loss", title="Elbo")
     fig.show()
 
 
@@ -98,5 +92,33 @@ def plot_mean_variance_line(data_mat):
     ax[1].set_title("Mean vs Variance per Site")
 
     x_values = np.linspace(0, 0.35, 1000)
+    variances = np.var(data_mat,axis=1)
+    means = np.mean(data_mat,axis=1)
+    ax[1].scatter(means, variances)
     ax[1].plot(x_values, x_values, c="r", label="Line y = x")
+
+
+def plot_betas(beta_samples, pred_names):
+    """
+    Plots the graphs corresponding for the betas obtained from 
+    """
+    pred_included = [constants.PRED_DICT[pred_name] for pred_name in pred_names]
+    sorted_values = sorted(zip(pred_included, pred_names), key = lambda x: x[0])
+
+    fig, ax = plt.subplots(nrows=len(pred_names),ncols=1, figsize = (10, 3 * len(pred_names)), sharex=True)
+    fig.suptitle('Posterior distributions for Predictors ')
+                           
+    
+    for i in range(len(sorted_values)):
+        sns.kdeplot(
+            beta_samples[:,i+1],
+            shade=True,
+            ax=ax[i]
+        )
+        ax[i].set_title(sorted_values[i][1])
+    plt.tight_layout()
+
     fig.show()
+    
+    
+    

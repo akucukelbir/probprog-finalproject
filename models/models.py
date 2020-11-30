@@ -98,7 +98,7 @@ def negative_binomial_log_linear_model(
         )
         epsilon = epsilon.unsqueeze(-1).expand(num_sites, num_days)
         theta = torch.exp(predictors @ betas + epsilon)
-        p = pyro.sample("p", dist.Beta(1000, 10))
+        p = pyro.sample("p", dist.Beta(1, 1))
         p = p.unsqueeze(-1).expand(num_sites, num_days)
         r = ((1 - p) / p) * theta
 
@@ -178,8 +178,7 @@ def train(
     pyro.clear_param_store()
     optimizer = torch.optim.Adam
 
-    # l1 = lambda x: 1/((t_0 + x)** kappa)
-    l1 = lambda x: 1
+    l1 = lambda x: 1/((t_0 + x)** kappa)
     optim_args = {"lr": lr}
     optim_params = {
         "optimizer": optimizer,
@@ -194,8 +193,6 @@ def train(
     for i in range(max_iters):
         scheduler.step()
         elbo = svi.step(**model_args)
-        if np.abs(elbo - losses[-1]) < threshold:
-            break
 
         losses.append(elbo)
         if i % 50 == 0:
