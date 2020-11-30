@@ -7,7 +7,7 @@ from pyro.infer import config_enumerate, TraceEnum_ELBO, Trace_ELBO, SVI
 import numpy as np
 import predictors
 import pyro.contrib.autoguide as autoguide
-
+import random
 
 def base_model(num_sites, num_days, data=None):
     with plate("sites", size=num_sites, dim=-2):
@@ -136,7 +136,9 @@ def train_with_random_init(model, model_args, kappa, t_0, threshold=1, max_iters
     scheduler = optim.LambdaLR(optim_params)
     
     best_loss = np.inf
-    for seed in range(0, 100):
+\
+    init_seed = random.randint(0, 1000000)
+    for seed in range(init_seed * 100, (init_seed+1) * 100):
         cur_loss, _, _ = initialize(seed, model, scheduler, model_args)
         if cur_loss < best_loss:
             best_seed = seed
