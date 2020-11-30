@@ -22,6 +22,32 @@ from sklearn.neighbors import KernelDensity
 import folium
 import seaborn as sns
 from folium.plugins import FastMarkerCluster, HeatMap
+from scipy.stats import skew
+def compute_mean_difference(data, selector, axis):
+    selected_idx = np.argwhere(selector)
+    unselected_idx = np.argwhere(np.ones(data.shape[axis]) - selector)
+    if axis == 1:
+        sel = data[:, selected_idx]
+        unsel = data[:, unselected_idx]
+    else:
+        sel = data[selected_idx, :]
+        unsel = data[unselected_idx, :]
+    selected_means = np.sum(sel, axis = axis)/len(selected_idx)
+    unselected_means = np.sum(unsel, axis = axis)/len(unselected_idx)
+    return np.squeeze(selected_means - unselected_means)
+
+def compute_mean_sample_mean_difference(data, selector, axis):
+    return compute_mean_difference(np.sum(data, axis=0)/data.shape[0], selector, axis)
+
+def plot_mean_difference(data, selector, axis):
+    sns.displot(compute_mean_difference(data, selector, axis))
+
+def plot_skew(samples, data, selector, axis):
+    actual_skew = skew(compute_mean_difference(data, selectors, axis))
+    skews = np.array(len(samples))
+    for i, sample in enumerate(samples):
+        skews[i] = skew(compute_mean_difference(sample.detach().numpy(), selectors, axis))
+    sns.displot(skews)
 
 
 def plot_max(samples, train_mat, num_max=10):
