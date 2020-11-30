@@ -5,6 +5,7 @@ or data processing that we use elsewhere
 
 import numpy as np
 
+
 def lineseg_dists(p, a, b):
     """Cartesian distance from point to line segment
 
@@ -20,8 +21,7 @@ def lineseg_dists(p, a, b):
     """
     # normalized tangent vectors
     d_ba = b - a
-    d = np.divide(d_ba, (np.hypot(d_ba[:, 0], d_ba[:, 1])
-                           .reshape(-1, 1)))
+    d = np.divide(d_ba, (np.hypot(d_ba[:, 0], d_ba[:, 1]).reshape(-1, 1)))
 
     # signed parallel distance components
     # rowwise dot products of 2D vectors
@@ -32,7 +32,7 @@ def lineseg_dists(p, a, b):
     h = np.maximum.reduce([s, t, np.zeros(len(s))])
 
     # perpendicular distance component
-    # rowwise cross products of 2D vectors  
+    # rowwise cross products of 2D vectors
     d_pa = p - a
     c = d_pa[:, 0] * d[:, 1] - d_pa[:, 1] * d[:, 0]
     return np.hypot(h, c)
