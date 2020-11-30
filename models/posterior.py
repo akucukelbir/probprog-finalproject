@@ -33,3 +33,4 @@ class Predict(torch.nn.Module):
             total_samples[key] = torch.stack(total_samples[key])
 
         return total_samples
+

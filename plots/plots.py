@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import scipy
-import 
 
 import datetime
 import constants
