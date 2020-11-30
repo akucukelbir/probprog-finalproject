@@ -21,7 +21,7 @@ def log_linear_model(num_sites, num_days, num_predictors,predictors, data=None):
     betas = pyro.sample('betas', dist.Normal(0 * torch.ones(num_predictors), 10* torch.ones(num_predictors)))
     thetas = predictors @ betas
     with plate('sites', size=num_sites, dim=-2):
-        epsilon = pyro.sample('epsilon', dist.Normal(0, 10)).expand(num_sites, num_days)
+        epsilon = pyro.sample('epsilon', dist.Normal(0, 5)).expand(num_sites, num_days)
         with plate('days', size=num_days, dim=-1):
             thetas = thetas + epsilon
             accidents = pyro.sample('accidents', dist.Poisson(torch.exp(thetas)), obs=data) 
@@ -82,8 +82,8 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
     pyro.clear_param_store()
     optimizer = torch.optim.Adam
     
-    #l1 = lambda x: 1/((t_0 + x)** kappa)
-    l1 = lambda x: 1
+    l1 = lambda x: 1/((t_0 + x)** kappa)
+    #l1 = lambda x: 1
     optim_args = {'lr': lr}
     optim_params = {
         'optimizer': optimizer,
@@ -99,8 +99,8 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
     for i in range(max_iters):
         scheduler.step()
         elbo = svi.step(**model_args)
-        if np.abs(elbo - losses[-1]) < threshold:
-            break
+        #if np.abs(elbo - losses[-1]) < threshold:
+        #    break
         
         losses.append(elbo)
         if i % 50 == 0: 
@@ -108,7 +108,7 @@ def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  
 
     return losses[1:]
 
-def train_log_linear(accidents, preds, predictor_labels, kappa, t_0, max_iters=2000):
+def train_log_linear(accidents, preds, predictor_labels, kappa, t_0,threshold=0.000000001, max_iters=2000):
     guide = autoguide.AutoDiagonalNormal(log_linear_model)
     preds = predictors.get_some_predictors(preds, predictor_labels)
     preds = torch.Tensor(preds)
@@ -121,4 +121,4 @@ def train_log_linear(accidents, preds, predictor_labels, kappa, t_0, max_iters=2
             'data': torch.tensor(accidents)
     }
 
-    return train(log_linear_model, guide, kappa=kappa, t_0=t_0, model_args=model_args, max_iters=max_iters), guide 
+    return train(log_linear_model, guide, kappa=kappa, t_0=t_0, model_args=model_args, max_iters=max_iters,threshold=threshold), guide 
