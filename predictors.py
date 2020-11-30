@@ -28,7 +28,7 @@ def normalize(predictors):
     normalization_constant =  np.max(np.max(predictors, axis=1), axis =0)
     return predictors/normalization_constant
 
-def get_some_predictors(predictors, predictor_labels, categorical_mapping):
+def get_some_predictors(predictors, predictor_labels):
     pred_dict = {
             'aadt': 1,
             'is_intersection': 2,
@@ -41,6 +41,5 @@ def get_some_predictors(predictors, predictor_labels, categorical_mapping):
     pred_idx = [0]
     for label in predictor_labels:
         pred_idx.append(pred_dict[label])
-    if not predictors:
-        predictors = get_predictors(categorical_mapping)
+    pred_idx.sort()
     return predictors[:, :, pred_idx]
