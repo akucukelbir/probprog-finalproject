@@ -31,8 +31,7 @@ def normalize(predictors):
     normalization_constant =  np.max(np.max(predictors, axis=1), axis =0)
     return predictors/normalization_constant
 
-def get_some_predictors(predictor_labels, categorical_mapping):
-    global predictors
+def get_some_predictors(predictors, predictor_labels, categorical_mapping):
     pred_dict = {
             'aadt': 1,
             'is_intersection': 2,
