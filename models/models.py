@@ -136,7 +136,7 @@ def train_with_random_init(model, model_args, kappa, t_0, threshold=1, max_iters
     scheduler = optim.LambdaLR(optim_params)
     
     best_loss = np.inf
-\
+
     init_seed = random.randint(0, 1000000)
     for seed in range(init_seed * 100, (init_seed+1) * 100):
         cur_loss, _, _ = initialize(seed, model, scheduler, model_args)
