@@ -30,11 +30,9 @@ def log_linear_model(
         ),
     )
     thetas = predictors @ betas
-    with plate("sites", size=num_sites, dim=-2):
-        epsilon = pyro.sample("epsilon", dist.Normal(0, 2)).expand(
-            num_sites, num_days
-        )
-        with plate("days", size=num_days, dim=-1):
+    with plate('sites', size=num_sites, dim=-2):
+        epsilon = pyro.sample('epsilon', dist.Normal(0, 10)).expand(num_sites, num_days)
+        with plate('days', size=num_days, dim=-1):
             thetas = thetas + epsilon
             accidents = pyro.sample(
                 "accidents", dist.Poisson(torch.exp(thetas)), obs=data
@@ -111,25 +109,17 @@ def negative_binomial_log_linear_model(
     return accidents
 
 
-def train(
-    model,
-    guide,
-    model_args,
-    kappa,
-    t_0,
-    threshold=1,
-    max_iters=2000,
-    loss=Trace_ELBO,
-    lr=1,
-):
+def train(model, guide, model_args, kappa, t_0, threshold=1, max_iters = 2000,  loss=Trace_ELBO, lr=0.05):
     """
     Trains model with guide. Kappa t_0 are parameters discussd in class
     Returns list with losses
     """
+    pyro.clear_param_store()
     optimizer = torch.optim.Adam
-
-    l1 = lambda x: 1 / ((t_0 + x) ** kappa)
-    optim_args = {"lr": lr}
+    
+    #l1 = lambda x: 1/((t_0 + x)** kappa)
+    l1 = lambda x: 1
+    optim_args = {'lr': lr}
     optim_params = {
         "optimizer": optimizer,
         "optim_args": optim_args,
@@ -139,7 +129,7 @@ def train(
     scheduler = optim.LambdaLR(optim_params)
     svi = SVI(model, guide, scheduler, loss=Trace_ELBO())
 
-    pyro.clear_param_store()
+   
     losses = [np.inf]
     for i in range(max_iters):
         scheduler.step()
