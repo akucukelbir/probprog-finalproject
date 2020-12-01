@@ -23,6 +23,8 @@ import folium
 import seaborn as sns
 from folium.plugins import FastMarkerCluster, HeatMap
 from scipy.stats import skew
+
+
 def compute_mean_difference(data, selector, axis):
     selected_idx = np.argwhere(selector)
     unselected_idx = np.argwhere(np.ones(data.shape[axis]) - selector)
@@ -39,15 +41,25 @@ def compute_mean_difference(data, selector, axis):
 def compute_mean_sample_mean_difference(data, selector, axis):
     return compute_mean_difference(np.sum(data, axis=0)/data.shape[0], selector, axis)
 
-def plot_mean_difference(data, selector, axis):
-    sns.displot(compute_mean_difference(data, selector, axis))
+def plot_mean_difference(data, selector, axis, title):
+    ax = plt.subplot()
+    sns.histplot(compute_mean_difference(data, selector, axis), ax=ax)
+    ax.set_xlabel("Differences of means")
+    ax.set_title(title)
 
-def plot_skew(samples, data, selector, axis):
-    actual_skew = skew(compute_mean_difference(data, selectors, axis))
-    skews = np.array(len(samples))
+def plot_skew(samples, data, selector, axis,title):
+    actual_skew = skew(compute_mean_difference(data, selector, axis))
+    skews = np.zeros((len(samples)))
     for i, sample in enumerate(samples):
-        skews[i] = skew(compute_mean_difference(sample.detach().numpy(), selectors, axis))
-    sns.displot(skews)
+        skews[i] = skew(compute_mean_difference(sample.detach().numpy(), selector, axis))
+
+    ax = plt.subplot()
+    sns.kdeplot(skews, ax=ax)
+    ax.scatter(x=[actual_skew], y=[0.0], c='r',s=100, label='Skewness for real dataset')
+    ax.set_xlabel('Skewness')
+    ax.set_title(title)
+
+
 
 
 def plot_max(samples, train_mat, num_max=10):
@@ -143,7 +155,7 @@ def plot_time_trend(samples, train_mat, window=61, polynomial=3):
     colors = ["r", "g", "b"]
     real = signal.savgol_filter(np.sum(train_mat, axis=0), window, polynomial)
     time = range(len(real))
-    fig, ax = plt.subplots(figsize=(10, 8), dpi=300)
+    fig, ax = plt.subplots(figsize=(13, 5),dpi=250)
     ax.plot(time, real, c="black", label="Original dataset")
     for i in range(int(len(quantiles_to_observe) / 2)):
         alpha = quantiles_to_observe[i]
