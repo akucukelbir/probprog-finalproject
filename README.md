@@ -1,7 +1,7 @@
 # Final Project Repository Template
 
 This is the final project repository template for
-[Machine Learning with Probabilistic Programming](http://www.proditus.com/mlpp2020).
+[Machine Learning with Probabilistic Programming](http://www.proditus.com/mlpp2021).
 
 ## Duplicating your own copy of this repository
 
@@ -49,24 +49,21 @@ correspond to a particular step of Box's loop. Feel free to include images; you
 can embed them in markdown cells.
 
 ## Development
-Use Python 3.8+. (I use Python 3.8.5).
+Use Python 3.9.X.
 
 Configure a virtual environment.
 Follow the documentation
-[here](https://docs.python.org/3.8/tutorial/venv.html).
-(I like to use [virtualenvwrapper](http://virtualenvwrapper.readthedocs.io/).)
+[here](https://docs.python.org/3.9/tutorial/venv.html).
 
-Once you activate the virtual environment, use `pip` to install a variety of
+Once you activate the virtual environment, use `pip` to install a foundational set of
 packages.
 ```{bash}
 (venv)$ pip install -r requirements.txt
 ```
 
-This should install Pyro, along with Jupyter and other useful libraries.
-You should see a message at the end that resembles something like
-```
-Successfully installed appnope-0.1.0 ...
-```
+This should install CmdStanPy, along with Jupyter and other useful libraries.
+
+Please install cmdstan into its default location `~/.cmdstan` by following the instructions here: [Installing CmdStan](https://cmdstanpy.readthedocs.io/en/v0.9.77/installation.html#installing-cmdstan)
 
 ### Additional dependencies
 If you introduce any new dependencies to your final project, you **MUST**
